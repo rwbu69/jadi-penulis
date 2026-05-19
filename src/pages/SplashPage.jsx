@@ -96,9 +96,12 @@ const SplashPage = () => {
         {/* API Key Toggle Trigger Button */}
         <button
           onClick={() => setShowApiKeyInput(!showApiKeyInput)}
-          className="mt-4 text-xs font-semibold text-gray-500 hover:text-indigo-600 transition-colors duration-200 focus:outline-none"
+          className="mt-4 text-xs font-semibold text-gray-500 hover:text-indigo-600 transition-colors duration-200 focus:outline-none flex items-center gap-1.5"
         >
-          {customApiKey ? '🔑 Menggunakan API Key Kustom (Ubah)' : '🔑 Gunakan API Key Sendiri'}
+          <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 7a2 2 0 012 2m-2-2a2 2 0 11-2-2m2 2l-3 3m0 0l-3-3m3 3v8a2 2 0 01-2 2H5a2 2 0 01-2-2v-4a2 2 0 012-2h8" />
+          </svg>
+          <span>{customApiKey ? 'Menggunakan API Key Kustom (Ubah)' : 'Gunakan API Key Sendiri'}</span>
         </button>
 
         {/* Custom API Key Input Form card */}

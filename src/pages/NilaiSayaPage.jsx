@@ -425,7 +425,9 @@ const NilaiSayaPage = () => {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 animate-slide-up-fade" style={{ animationDelay: '50ms' }}>
                     {akademisStats.strength && (
                       <div className="p-4 rounded-xl border border-emerald-100 bg-emerald-50/50 flex items-start gap-3">
-                        <span className="text-xl">🌟</span>
+                        <svg className="w-5 h-5 text-emerald-600 mt-0.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.907c.961 0 1.36 1.243.577 1.81l-3.97 2.883a1 1 0 00-.364 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.971-2.883a1 1 0 00-1.18 0l-3.97 2.883c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.364-1.118l-3.97-2.883c-.783-.567-.384-1.81.577-1.81h4.908a1 1 0 00.95-.69l1.519-4.674z" />
+                        </svg>
                         <div>
                           <div className="text-xs font-bold text-emerald-800 uppercase tracking-wider">Kekuatan Utama</div>
                           <div className="text-sm font-semibold text-slate-800 mt-1">{akademisStats.strength.name}</div>
@@ -435,7 +437,9 @@ const NilaiSayaPage = () => {
                     )}
                     {akademisStats.weakness && (
                       <div className="p-4 rounded-xl border border-amber-100 bg-amber-50/50 flex items-start gap-3">
-                        <span className="text-xl">⚠️</span>
+                        <svg className="w-5 h-5 text-amber-600 mt-0.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                        </svg>
                         <div>
                           <div className="text-xs font-bold text-amber-800 uppercase tracking-wider">Fokus Perbaikan</div>
                           <div className="text-sm font-semibold text-slate-800 mt-1">{akademisStats.weakness.name}</div>
@@ -444,7 +448,7 @@ const NilaiSayaPage = () => {
                       </div>
                     )}
                   </div>
-
+ 
                   {/* Horizontal Bar Charts */}
                   <div className="space-y-4 pt-2">
                     {akademisCriteria.map((cName, idx) => {
@@ -479,7 +483,9 @@ const NilaiSayaPage = () => {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 animate-slide-up-fade" style={{ animationDelay: '50ms' }}>
                     {kreatifStats.strength && (
                       <div className="p-4 rounded-xl border border-emerald-100 bg-emerald-50/50 flex items-start gap-3">
-                        <span className="text-xl">🌟</span>
+                        <svg className="w-5 h-5 text-emerald-600 mt-0.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.907c.961 0 1.36 1.243.577 1.81l-3.97 2.883a1 1 0 00-.364 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.971-2.883a1 1 0 00-1.18 0l-3.97 2.883c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.364-1.118l-3.97-2.883c-.783-.567-.384-1.81.577-1.81h4.908a1 1 0 00.95-.69l1.519-4.674z" />
+                        </svg>
                         <div>
                           <div className="text-xs font-bold text-emerald-800 uppercase tracking-wider">Kekuatan Utama</div>
                           <div className="text-sm font-semibold text-slate-800 mt-1">{kreatifStats.strength.name}</div>
@@ -489,7 +495,9 @@ const NilaiSayaPage = () => {
                     )}
                     {kreatifStats.weakness && (
                       <div className="p-4 rounded-xl border border-amber-100 bg-amber-50/50 flex items-start gap-3">
-                        <span className="text-xl">⚠️</span>
+                        <svg className="w-5 h-5 text-amber-600 mt-0.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                        </svg>
                         <div>
                           <div className="text-xs font-bold text-amber-800 uppercase tracking-wider">Fokus Perbaikan</div>
                           <div className="text-sm font-semibold text-slate-800 mt-1">{kreatifStats.weakness.name}</div>

@@ -70,8 +70,10 @@ const WritingPage = () => {
   const wordCount = getWordCount(userText);
 
   const handlePaste = (e) => {
-    e.preventDefault();
-    toast.error('Untuk melatih kejujuran dan keaslian tulisan, Anda wajib mengetik tulisan secara langsung tanpa menyalin (copy-paste) dari sumber lain.');
+    if (mode === 'kreatif') {
+      e.preventDefault();
+      toast.error('Untuk menghasilkan tulisan yang organik dan melatih daya pikir, lebih baik Anda mengetik tulisan secara langsung tanpa menyalin dari sumber lain.');
+    }
   };
 
   const handleSubmit = (e) => {
@@ -296,9 +298,16 @@ const WritingPage = () => {
                   placeholder={mode === 'kreatif' ? 'Tulis paragraf naratif atau deskriptif Anda di sini (harus lebih dari 100 kata)...' : 'Tulis paragraf tanggapan akademis Anda di sini (harus lebih dari 100 kata)...'}
                   className="w-full flex-1 p-4 border border-gray-300 rounded-lg text-slate-800 text-sm focus:outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 resize-none transition-all duration-200"
                 />
-                <div className="text-right mt-2 flex justify-between items-center">
-                  <span className={`text-xs font-semibold ${wordCount > 100 ? 'text-emerald-600' : 'text-amber-600'}`}>
-                    {wordCount > 100 ? '✓ Lebih dari 100 kata' : `Kekurangan ${101 - wordCount} kata lagi`}
+                <div className="text-right mt-2 flex justify-between items-center w-full">
+                  <span className={`text-xs font-semibold flex items-center gap-1 ${wordCount > 100 ? 'text-emerald-600' : 'text-amber-600'}`}>
+                    {wordCount > 100 ? (
+                      <>
+                        <svg className="w-3.5 h-3.5 text-emerald-600 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                        </svg>
+                        <span>Lebih dari 100 kata</span>
+                      </>
+                    ) : `Kekurangan ${101 - wordCount} kata lagi`}
                   </span>
                   <span className="text-xs text-gray-500 font-medium">
                     Jumlah Kata: {wordCount} (Minimal 101 kata)
