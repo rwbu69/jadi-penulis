@@ -97,7 +97,7 @@ const HighlightedText = ({ text, corrections }) => {
 };
 
 const ResultsPage = () => {
-  const { evaluateWriting, evaluateMenulisCepat, saveToHistory } = useContext(AppContext);
+  const { evaluateWriting, evaluateMenulisCepat, saveToHistory, customApiKey } = useContext(AppContext);
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -195,14 +195,14 @@ const ResultsPage = () => {
       const histOther = savedOtherStr ? JSON.parse(savedOtherStr) : [];
 
       if (hist.length === 0 && histOther.length === 0) {
-         earnedToasts.push("🌟 Pencapaian Terbuka: Langkah Pertama!");
+         earnedToasts.push("Pencapaian Terbuka: Langkah Pertama!");
       }
       
       const prevHasFast = hist.some(s => parseFloat(s.wpm) >= 80);
-      if (!prevHasFast && parseFloat(wpm) >= 80) earnedToasts.push("⚡ Pencapaian Terbuka: Si Kilat!");
+      if (!prevHasFast && parseFloat(wpm) >= 80) earnedToasts.push("Pencapaian Terbuka: Si Kilat!");
       
       const prevHasSniper = hist.some(s => parseFloat(s.accuracy) === 100);
-      if (!prevHasSniper && parseFloat(accuracy) === 100) earnedToasts.push("🎯 Pencapaian Terbuka: Penembak Jitu!");
+      if (!prevHasSniper && parseFloat(accuracy) === 100) earnedToasts.push("Pencapaian Terbuka: Penembak Jitu!");
 
       const dateStr = new Date().toLocaleDateString('id-ID', {
         day: 'numeric',
@@ -221,11 +221,11 @@ const ResultsPage = () => {
       const histCepat = savedCepatStr ? JSON.parse(savedCepatStr) : [];
 
       if (hist.length === 0 && histCepat.length === 0) {
-         earnedToasts.push("🌟 Pencapaian Terbuka: Langkah Pertama!");
+         earnedToasts.push("Pencapaian Terbuka: Langkah Pertama!");
       }
       
       if (hist.length === 2) { // will become 3
-         earnedToasts.push("📈 Pencapaian Terbuka: Konsisten!");
+         earnedToasts.push("Pencapaian Terbuka: Konsisten!");
       }
       
       const match = evaluation.match(/total skor:\s*\*?\[?(\d+)\]?\/20\*?/i);
@@ -237,7 +237,7 @@ const ResultsPage = () => {
       });
       
       if (!prevPujangga && score >= 18) {
-         earnedToasts.push("🏆 Pencapaian Terbuka: Pujangga!");
+         earnedToasts.push("Pencapaian Terbuka: Pujangga!");
       }
 
       saveToHistory(mode || 'akademis', prompt, text, evaluation);
@@ -432,6 +432,14 @@ const ResultsPage = () => {
           }`}>
             Mode: {mode === 'menulisCepat' ? 'Menulis Cepat' : mode === 'kreatif' ? 'Kreatif' : 'Akademis'}
           </span>
+          {customApiKey && (
+            <span className="text-[10px] px-2 py-1 rounded-full font-semibold border bg-amber-50 text-amber-700 border-amber-200 flex items-center gap-1.5">
+              <svg className="w-3 h-3 text-amber-600 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 7a2 2 0 012 2m-2-2a2 2 0 11-2-2m2 2l-3 3m0 0l-3-3m3 3v8a2 2 0 01-2 2H5a2 2 0 01-2-2v-4a2 2 0 012-2h8" />
+              </svg>
+              <span>Key Kustom Aktif</span>
+            </span>
+          )}
         </div>
         <div className="flex items-center gap-4">
           <Link
@@ -474,7 +482,9 @@ const ResultsPage = () => {
             {/* Warning Banner */}
             {isOfflineMode && (
               <div className="bg-amber-50 border border-amber-300 rounded-xl p-4 flex items-start gap-3 text-amber-800 animate-pulse">
-                <span className="text-xl">⚠️</span>
+                <svg className="w-5 h-5 text-amber-600 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                </svg>
                 <div>
                   <h4 className="font-bold text-sm">Mode Evaluasi Lokal Aktif</h4>
                   <p className="text-xs leading-relaxed mt-0.5">

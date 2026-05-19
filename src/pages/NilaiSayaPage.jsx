@@ -20,21 +20,61 @@ const NilaiSayaPage = () => {
     const earned = [];
     
     if (history.length > 0 || menulisCepatHistory.length > 0) {
-      earned.push({ id: 'first_step', name: 'Langkah Pertama', icon: '🌟', desc: 'Menyelesaikan 1 latihan menulis.', color: 'from-amber-50 to-amber-100 text-amber-800 border-amber-200' });
+      earned.push({
+        id: 'first_step',
+        name: 'Langkah Pertama',
+        icon: (
+          <svg className="w-6 h-6 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+          </svg>
+        ),
+        desc: 'Menyelesaikan 1 latihan menulis.',
+        color: 'from-amber-50 to-amber-100 text-amber-855 border-amber-200'
+      });
     }
     
     if (history.length >= 3) {
-      earned.push({ id: 'consistent', name: 'Konsisten', icon: '📈', desc: 'Menyelesaikan minimal 3 latihan (Akademis/Kreatif).', color: 'from-blue-50 to-indigo-100 text-indigo-800 border-indigo-200' });
+      earned.push({
+        id: 'consistent',
+        name: 'Konsisten',
+        icon: (
+          <svg className="w-6 h-6 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+          </svg>
+        ),
+        desc: 'Menyelesaikan minimal 3 latihan (Akademis/Kreatif).',
+        color: 'from-blue-50 to-indigo-100 text-indigo-805 border-indigo-200'
+      });
     }
     
     const hasFastWpm = menulisCepatHistory.some(session => parseFloat(session.wpm) >= 80);
     if (hasFastWpm) {
-      earned.push({ id: 'fast', name: 'Si Kilat', icon: '⚡', desc: 'Mencapai > 80 WPM di Menulis Cepat.', color: 'from-orange-50 to-red-100 text-red-800 border-red-200' });
+      earned.push({
+        id: 'fast',
+        name: 'Si Kilat',
+        icon: (
+          <svg className="w-6 h-6 text-orange-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+          </svg>
+        ),
+        desc: 'Mencapai > 80 WPM di Menulis Cepat.',
+        color: 'from-orange-50 to-red-105 text-red-800 border-red-200'
+      });
     }
     
     const hasPerfectAccuracy = menulisCepatHistory.some(session => parseFloat(session.accuracy) === 100);
     if (hasPerfectAccuracy) {
-      earned.push({ id: 'sniper', name: 'Penembak Jitu', icon: '🎯', desc: 'Akurasi 100% di Menulis Cepat.', color: 'from-green-50 to-emerald-100 text-emerald-800 border-emerald-200' });
+      earned.push({
+        id: 'sniper',
+        name: 'Penembak Jitu',
+        icon: (
+          <svg className="w-6 h-6 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+        ),
+        desc: 'Akurasi 100% di Menulis Cepat.',
+        color: 'from-green-50 to-emerald-100 text-emerald-855 border-emerald-200'
+      });
     }
     
     const isPujangga = history.some(session => {
@@ -42,9 +82,19 @@ const NilaiSayaPage = () => {
       return match && parseInt(match[1]) >= 18;
     });
     if (isPujangga) {
-      earned.push({ id: 'pujangga', name: 'Pujangga', icon: '🏆', desc: 'Total Skor ≥ 18 di Akademis/Kreatif.', color: 'from-purple-50 to-fuchsia-100 text-fuchsia-800 border-fuchsia-200' });
+      earned.push({
+        id: 'pujangga',
+        name: 'Pujangga',
+        icon: (
+          <svg className="w-6 h-6 text-fuchsia-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5a2 2 0 10-2 2h2zm-2 4h4M8 21h8" />
+          </svg>
+        ),
+        desc: 'Total Skor ≥ 18 di Akademis/Kreatif.',
+        color: 'from-purple-50 to-fuchsia-100 text-fuchsia-800 border-fuchsia-200'
+      });
     }
-
+ 
     return earned;
   };
 

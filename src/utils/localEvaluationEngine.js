@@ -171,7 +171,7 @@ Skor: ${scoreDiksi}/4
 
 ### Kriteria 5: Kejelasan Ide dan Argumentasi
 **Kekuatan:** Ide yang diajukan memiliki korelasi dengan kata kunci topik sekitar ${Math.round(relevanceRatio * 100)}%.
-**Area Perbaikan:** ${scoreRelevance === 1 ? '⚠️ PENTING: Tulisan Anda dinilai melenceng jauh dari Topik (Prompt) utama yang diajukan. Harap tulis ulang esai agar sepenuhnya menjawab topik penulisan.' : scoreRelevance < 4 ? 'Fokuskan argumen utama agar langsung mengarah pada topik yang diminta tanpa melebar terlalu jauh.' : 'Ide utama orisinal dan tersampaikan dengan argumentasi yang relevan.'}
+**Area Perbaikan:** ${scoreRelevance === 1 ? 'PENTING: Tulisan Anda dinilai melenceng jauh dari Topik (Prompt) utama yang diajukan. Harap tulis ulang esai agar sepenuhnya menjawab topik penulisan.' : scoreRelevance < 4 ? 'Fokuskan argumen utama agar langsung mengarah pada topik yang diminta tanpa melebar terlalu jauh.' : 'Ide utama orisinal dan tersampaikan dengan argumentasi yang relevan.'}
 Skor: ${scoreRelevance}/4
 
 ---

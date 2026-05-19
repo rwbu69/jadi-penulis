@@ -5,7 +5,7 @@ import { AppContext } from '../context/AppContext';
 import { FALLBACK_PROMPTS } from '../config/fallbackData';
 
 const WritingPage = () => {
-  const { generateWritingPrompt } = useContext(AppContext);
+  const { generateWritingPrompt, customApiKey } = useContext(AppContext);
   const [searchParams] = useSearchParams();
   const mode = searchParams.get('mode') === 'kreatif' ? 'kreatif' : 'akademis';
 
@@ -141,6 +141,14 @@ const WritingPage = () => {
           }`}>
             Mode: {mode === 'kreatif' ? 'Kreatif' : 'Akademis'}
           </span>
+          {customApiKey && (
+            <span className="text-[10px] px-2 py-1 rounded-full font-semibold border bg-amber-50 text-amber-700 border-amber-200 flex items-center gap-1.5">
+              <svg className="w-3 h-3 text-amber-600 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 7a2 2 0 012 2m-2-2a2 2 0 11-2-2m2 2l-3 3m0 0l-3-3m3 3v8a2 2 0 01-2 2H5a2 2 0 01-2-2v-4a2 2 0 012-2h8" />
+              </svg>
+              <span>Key Kustom Aktif</span>
+            </span>
+          )}
         </div>
         <div className="flex items-center gap-4">
           <Link
