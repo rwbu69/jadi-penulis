@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 import { AppContext } from '../context/AppContext';
 import { aiPrompts } from '../config/aiPrompts';
+import { FALLBACK_TYPING_PARAGRAPHS } from '../config/fallbackData';
 
 const MenulisCepatPage = () => {
   const { customApiKey } = useContext(AppContext);
@@ -21,6 +22,7 @@ const MenulisCepatPage = () => {
   // Loading States
   const [loadingParagraph, setLoadingParagraph] = useState(true);
   const [paragraphRateLimitCountdown, setParagraphRateLimitCountdown] = useState(0);
+  const [isOfflineParagraph, setIsOfflineParagraph] = useState(false);
 
   // Refs for tracking timestamps & intervals
   const startTimeRef = useRef(null);
@@ -28,6 +30,17 @@ const MenulisCepatPage = () => {
   const wpmSamplesRef = useRef([]);
   const lastSampleTimeRef = useRef(null);
   const userTextRef = useRef('');
+  const activeCharRef = useRef(null);
+
+  // Auto scroll to active character
+  useEffect(() => {
+    if (activeCharRef.current) {
+      activeCharRef.current.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center',
+      });
+    }
+  }, [userText]);
 
   // Sync ref with state so intervals can access latest typed characters
   useEffect(() => {
@@ -73,6 +86,7 @@ const MenulisCepatPage = () => {
   const fetchParagraph = async () => {
     setLoadingParagraph(true);
     setParagraphRateLimitCountdown(0);
+    setIsOfflineParagraph(false);
     try {
       const apiKey = customApiKey || import.meta.env.VITE_CEREBRAS_API_KEY;
       if (!apiKey) {
@@ -94,7 +108,7 @@ const MenulisCepatPage = () => {
             },
             {
               role: 'user',
-              content: 'Berikan satu paragraf bahasa Indonesia untuk tes mengetik cepat.',
+              content: 'Berikan satu paragraf bahasa Indonesia untuk tes mengetik cepat. Panjang teks WAJIB minimal 100 kata.',
             }
           ],
           max_tokens: 512,
@@ -119,7 +133,9 @@ const MenulisCepatPage = () => {
         return;
       }
       toast.error('Gagal memuat paragraf dari AI. Menggunakan paragraf cadangan.');
-      setTargetText('Pendidikan adalah senjata paling ampuh yang dapat Anda gunakan untuk mengubah dunia secara positif. Mengetik cepat melatih ketangkasan jari-jemari serta konsentrasi pikiran dalam menyusun kata demi kata secara teratur. Dengan latihan yang tekun, Anda dapat menghemat banyak waktu berharga saat bekerja maupun belajar sehari-hari. Mulailah berlatih hari ini demi masa depan yang lebih efisien dan produktif secara profesional.');
+      setIsOfflineParagraph(true);
+      const randomParagraph = FALLBACK_TYPING_PARAGRAPHS[Math.floor(Math.random() * FALLBACK_TYPING_PARAGRAPHS.length)];
+      setTargetText(randomParagraph);
     } finally {
       setLoadingParagraph(false);
     }
@@ -280,6 +296,11 @@ const MenulisCepatPage = () => {
         }
       } else if (index === userText.length) {
         className += 'text-slate-800 bg-indigo-100 font-bold border-l-2 border-indigo-600 animate-pulse';
+        return (
+          <span key={index} ref={activeCharRef} className={className}>
+            {char}
+          </span>
+        );
       } else {
         className += 'text-gray-400';
       }
@@ -374,7 +395,14 @@ const MenulisCepatPage = () => {
             {/* Speed Test Panel */}
             <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm space-y-5">
               <div className="flex justify-between items-center">
-                <span className="text-xs font-bold text-gray-500 uppercase tracking-wider">Teks Target</span>
+                <span className="text-xs font-bold text-gray-500 uppercase tracking-wider flex items-center gap-2">
+                  Teks Target
+                  {isOfflineParagraph && (
+                    <span className="text-[10px] lowercase first-letter:uppercase px-2 py-0.5 rounded bg-amber-100 text-amber-800 border border-amber-200 font-normal">
+                      Teks Cadangan (Offline)
+                    </span>
+                  )}
+                </span>
                 {isStarted && !isFinished && (
                   <span className="text-xs font-semibold text-indigo-600 animate-pulse flex items-center gap-1">
                     <span className="w-1.5 h-1.5 rounded-full bg-indigo-600"></span>
@@ -397,7 +425,7 @@ const MenulisCepatPage = () => {
                   <span className="text-xs text-gray-500 animate-pulse">Membuat teks baru dari AI...</span>
                 </div>
               ) : (
-                <div className="bg-gray-50 border border-gray-200 rounded-xl p-5 select-none font-serif text-sm md:text-base leading-relaxed tracking-wide min-h-32 whitespace-pre-wrap max-h-56 overflow-y-auto">
+                <div className="bg-gray-50 border border-gray-200 rounded-xl p-5 select-none font-serif text-sm md:text-base leading-relaxed tracking-wide min-h-32 whitespace-pre-wrap max-h-56 overflow-y-auto scroll-smooth [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
                   {renderTargetText()}
                 </div>
               )}

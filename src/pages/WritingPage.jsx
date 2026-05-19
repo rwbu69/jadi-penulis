@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext, useRef } from 'react';
 import { useNavigate, Link, useSearchParams } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 import { AppContext } from '../context/AppContext';
+import { FALLBACK_PROMPTS } from '../config/fallbackData';
 
 const WritingPage = () => {
   const { generateWritingPrompt } = useContext(AppContext);
@@ -14,6 +15,7 @@ const WritingPage = () => {
   const [userText, setUserText] = useState('');
   const [visible, setVisible] = useState(false);
   const [rateLimitCountdown, setRateLimitCountdown] = useState(0);
+  const [isOfflinePrompt, setIsOfflinePrompt] = useState(false);
   const navigate = useNavigate();
 
   // Guard against React Strict Mode double-firing during dev
@@ -31,6 +33,7 @@ const WritingPage = () => {
     setLoadingPrompt(true);
     setPromptVisible(false);
     setRateLimitCountdown(0);
+    setIsOfflinePrompt(false);
     try {
       const generated = await generateWritingPrompt(mode);
       setPrompt(generated);
@@ -40,12 +43,11 @@ const WritingPage = () => {
         setRateLimitCountdown(60);
         return;
       }
-      toast.error(err.message || 'Gagal mengambil topik penulisan. Coba muat ulang halaman.');
-      if (mode === 'kreatif') {
-        setPrompt('Tuliskan sebuah paragraf tentang perasaan seseorang saat pertama kali melihat senja di tepi pantai terpencil.');
-      } else {
-        setPrompt('Tuliskan pendapatmu mengenai pentingnya menjaga kebersihan lingkungan sekolah demi kenyamanan belajar mengajar.');
-      }
+      toast.error('Gagal memuat topik dari AI. Menggunakan topik cadangan.');
+      setIsOfflinePrompt(true);
+      const fallbacks = FALLBACK_PROMPTS[mode] || FALLBACK_PROMPTS.akademis;
+      const randomPrompt = fallbacks[Math.floor(Math.random() * fallbacks.length)];
+      setPrompt(randomPrompt);
     } finally {
       setLoadingPrompt(false);
     }
@@ -249,7 +251,7 @@ const WritingPage = () => {
 
           {/* Warning Note */}
           <div className="text-amber-600 bg-amber-50 border border-amber-200 rounded-lg p-3.5 text-xs leading-relaxed space-y-1.5">
-            <p><strong>Pemberitahuan Sistem:</strong> Aplikasi ini menggunakan Cerebras AI (gpt-oss-120b) dengan free tier 30 request per menit. Hindari melakukan submit terlalu cepat secara berturut-turut.</p>
+            <p><strong>Pemberitahuan Sistem:</strong> Aplikasi ini menggunakan Cerebras AI (gpt-oss-120b) dengan free tier 5 request per menit. Hindari melakukan submit terlalu cepat secara berturut-turut.</p>
             <p className="border-t border-amber-200 pt-1.5 text-[10px] italic">
               *Penting: Hasil evaluasi yang diberikan oleh AI bersifat membantu pembelajaran mandiri dan tidak mungkin 100% benar atau akurat secara mutlak.
             </p>
@@ -262,8 +264,13 @@ const WritingPage = () => {
           <div className="p-6 md:p-12 border-b border-gray-200 flex-1 flex flex-col justify-center">
             <div className="space-y-4">
               <div className="flex justify-between items-center">
-                <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wider">
+                <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wider flex items-center gap-2">
                   Topik Penulisan Anda
+                  {isOfflinePrompt && (
+                    <span className="text-[10px] lowercase first-letter:uppercase px-2 py-0.5 rounded bg-amber-100 text-amber-800 border border-amber-200 font-normal">
+                      Topik Cadangan (Offline)
+                    </span>
+                  )}
                 </h3>
                 {!loadingPrompt && (
                   <button 

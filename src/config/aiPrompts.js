@@ -414,6 +414,9 @@ export const EVALUATION_INSTRUCTIONS = {
 PENTING — BACA SEBELUM MENGEVALUASI:
 Anda mengevaluasi tulisan pelajar usia 12–18 tahun, bukan penulis profesional. Standar penilaian harus realistis: skor 4 (sangat baik) hanya diberikan jika benar-benar memenuhi semua deskriptor, bukan secara default. Jangan terlalu murah hati (semua skor 4) atau terlalu pelit (semua skor 1). Gunakan rubrik di bawah ini sebagai acuan wajib.
 
+ATURAN RELEVANSI TOPIK (SANGAT PENTING):
+Bandingkan tulisan siswa dengan Topik (Prompt) yang diberikan. JIKA tulisan siswa melenceng jauh, tidak nyambung, atau membahas hal yang sama sekali berbeda dari Topik yang diminta, Anda WAJIB memberikan skor 1 pada Kriteria 5 (Kejelasan Ide dan Argumentasi), terlepas dari sebaik apa pun tata bahasanya. Jelaskan secara tegas di 'Area Perbaikan' bahwa tulisan mereka di luar konteks topik.
+
 LANGKAH EVALUASI (ikuti urutan ini):
 1. Baca seluruh teks siswa satu kali untuk memahami isi secara keseluruhan.
 2. Baca teks kedua kali sambil menandai kekuatan dan kelemahan per kriteria.
@@ -474,6 +477,9 @@ Skor: [X]/4
 
 PENTING — BACA SEBELUM MENGEVALUASI:
 Anda mengevaluasi tulisan pelajar usia 12–18 tahun, bukan penulis profesional. Standar penilaian harus realistis: skor 4 (sangat baik) hanya diberikan jika benar-benar memenuhi semua deskriptor. Dalam tulisan kreatif, penyimpangan dari kaidah bahasa bisa DITERIMA jika jelas bertujuan artistik (misalnya kalimat fragmen untuk efek dramatis). Namun penyimpangan karena ketidaktahuan aturan tetap dicatat. Gunakan rubrik di bawah ini sebagai acuan wajib.
+
+ATURAN RELEVANSI TOPIK (SANGAT PENTING):
+Bandingkan tulisan siswa dengan Topik (Prompt) yang diberikan. JIKA tulisan siswa melenceng jauh, tidak nyambung, atau membahas hal yang sama sekali berbeda dari Topik yang diminta, Anda WAJIB memberikan skor 1 pada Kriteria 5 (Orisinalitas Ide dan Ekspresi), terlepas dari sebaik apa pun gaya bahasanya. Jelaskan secara tegas di 'Area Perbaikan' bahwa tulisan mereka di luar konteks topik yang diminta.
 
 LANGKAH EVALUASI (ikuti urutan ini):
 1. Baca seluruh teks siswa satu kali untuk merasakan kesan dan suasana yang dibangun.
@@ -567,7 +573,7 @@ export const aiPrompts = {
 Your task is to generate exactly one paragraph in Bahasa Indonesia for a typing test.
 
 Requirements:
-- The paragraph MUST contain exactly 5 sentences.
+- The paragraph MUST contain a minimum of 100 words. This is a strict requirement for the typing test duration.
 - The language must be natural, engaging, and suitable for teenagers (ages 12–18).
 - The sentence lengths should be varied.
 - Return ONLY the raw plain text paragraph itself.

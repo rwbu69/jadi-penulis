@@ -2,50 +2,96 @@ import React, { useState, useEffect, useContext, useRef, useCallback } from 'rea
 import { useLocation, useNavigate, Link } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 import { AppContext } from '../context/AppContext';
+import { runLocalEvaluation, runLocalMenulisCepatEvaluation } from '../utils/localEvaluationEngine';
 
 const HighlightedText = ({ text, corrections }) => {
   if (!corrections || corrections.length === 0) {
     return <p className="text-gray-700 text-sm md:text-base leading-relaxed whitespace-pre-wrap">{text}</p>;
   }
 
-  let elements = [text];
+  const findMatchRanges = (fullText, wrongStr) => {
+    // 1. Try exact match first
+    let idx = fullText.indexOf(wrongStr);
+    if (idx !== -1) return { start: idx, end: idx + wrongStr.length };
 
-  corrections.forEach((corr, idx) => {
-    const newElements = [];
-    elements.forEach(el => {
-      if (typeof el === 'string') {
-        // Only split if the wrong text is actually in the string
-        if (!el.includes(corr.wrong)) {
-          newElements.push(el);
-          return;
-        }
-        const parts = el.split(corr.wrong);
-        for (let i = 0; i < parts.length; i++) {
-          newElements.push(parts[i]);
-          if (i < parts.length - 1) {
-            newElements.push(
-              <span key={`corr-${idx}-${i}`} className="relative group cursor-help bg-red-100 text-red-900 border-b-2 border-red-500 rounded px-0.5">
-                {corr.wrong}
-                <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 w-max max-w-xs bg-slate-800 text-white text-xs font-bold px-2.5 py-1.5 rounded shadow-xl opacity-0 group-hover:opacity-100 transition-opacity z-10 pointer-events-none">
-                  Saran: {corr.correct}
-                  <span className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-slate-800"></span>
-                </span>
-              </span>
-            );
-          }
-        }
-      } else {
-        newElements.push(el);
+    // 2. Try case-insensitive match
+    idx = fullText.toLowerCase().indexOf(wrongStr.toLowerCase());
+    if (idx !== -1) return { start: idx, end: idx + wrongStr.length };
+
+    // 3. Try flexible match ignoring punctuation and whitespace
+    const map = [];
+    let normalizedText = "";
+    for (let i = 0; i < fullText.length; i++) {
+      const char = fullText[i];
+      if (/[a-zA-Z0-9]/.test(char)) {
+        normalizedText += char.toLowerCase();
+        map.push(i);
       }
-    });
-    elements = newElements;
+    }
+
+    let normalizedWrong = wrongStr.toLowerCase().replace(/[^a-z0-9]/g, '');
+    if (normalizedWrong.length === 0) return null;
+
+    let normIdx = normalizedText.indexOf(normalizedWrong);
+    if (normIdx !== -1) {
+      const originalStart = map[normIdx];
+      const originalEnd = map[normIdx + normalizedWrong.length - 1] + 1;
+      return { start: originalStart, end: originalEnd };
+    }
+
+    return null;
+  };
+
+  let highlightRanges = [];
+  corrections.forEach((corr, idx) => {
+    const range = findMatchRanges(text, corr.wrong);
+    if (range) {
+      highlightRanges.push({ ...range, ...corr, corrIdx: idx });
+    }
   });
+
+  highlightRanges.sort((a, b) => a.start - b.start);
+
+  const nonOverlapping = [];
+  let lastEnd = 0;
+  for (const r of highlightRanges) {
+    if (r.start >= lastEnd) {
+      nonOverlapping.push(r);
+      lastEnd = r.end;
+    }
+  }
+
+  const elements = [];
+  let currentIndex = 0;
+
+  nonOverlapping.forEach((range, idx) => {
+    if (range.start > currentIndex) {
+      elements.push(text.slice(currentIndex, range.start));
+    }
+    
+    const originalTextFragment = text.slice(range.start, range.end);
+    elements.push(
+      <span key={`hl-${idx}`} className="relative group cursor-help bg-red-100 text-red-900 border-b-2 border-red-500 rounded px-0.5">
+        {originalTextFragment}
+        <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 w-max max-w-xs bg-slate-800 text-white text-xs font-bold px-2.5 py-1.5 rounded shadow-xl opacity-0 group-hover:opacity-100 transition-opacity z-10 pointer-events-none">
+          Saran: {range.correct}
+          <span className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-slate-800"></span>
+        </span>
+      </span>
+    );
+    
+    currentIndex = range.end;
+  });
+
+  if (currentIndex < text.length) {
+    elements.push(text.slice(currentIndex));
+  }
 
   return (
     <div className="text-gray-700 text-sm md:text-base leading-relaxed whitespace-pre-wrap">
-      {elements.map((el, i) => (
+      {elements.length > 0 ? elements.map((el, i) => (
         <React.Fragment key={i}>{el}</React.Fragment>
-      ))}
+      )) : text}
     </div>
   );
 };
@@ -60,6 +106,7 @@ const ResultsPage = () => {
   const [loading, setLoading] = useState(true);
   const [resultsVisible, setResultsVisible] = useState(false);
   const [rateLimitCountdown, setRateLimitCountdown] = useState(0);
+  const [isOfflineMode, setIsOfflineMode] = useState(false);
 
   // Guard against React Strict Mode double-firing during dev
   const evaluationFetched = useRef(false);
@@ -75,6 +122,7 @@ const ResultsPage = () => {
   const fetchEvaluation = useCallback(async () => {
     setLoading(true);
     setRateLimitCountdown(0);
+    setIsOfflineMode(false);
     try {
       let feedback;
       if (mode === 'menulisCepat') {
@@ -84,19 +132,21 @@ const ResultsPage = () => {
       }
       setEvaluation(feedback);
     } catch (err) {
-      console.error(err);
-      if (err.status === 429) {
-        evaluationFetched.current = false; // allow retrying
-        setRateLimitCountdown(60);
-        return;
+      console.error('API Evaluation failed, switching to local evaluation engine:', err);
+      setIsOfflineMode(true);
+      toast.error('Gagal memuat evaluasi AI. Mengaktifkan sistem penilaian lokal.');
+      
+      let localFeedback;
+      if (mode === 'menulisCepat') {
+        localFeedback = runLocalMenulisCepatEvaluation(wpm, accuracy, consistency, mistypedChars);
+      } else {
+        localFeedback = runLocalEvaluation(mode || 'akademis', prompt, text);
       }
-      toast.error(err.message || 'Gagal memuat evaluasi AI. Silakan coba kirim ulang.');
-      evaluationFetched.current = false;
-      navigate(mode === 'menulisCepat' ? '/menulis-cepat' : `/write?mode=${mode || 'akademis'}`);
+      setEvaluation(localFeedback);
     } finally {
       setLoading(false);
     }
-  }, [mode, prompt, text, wpm, accuracy, consistency, mistypedChars, evaluateWriting, evaluateMenulisCepat, navigate]);
+  }, [mode, prompt, text, wpm, accuracy, consistency, mistypedChars, evaluateWriting, evaluateMenulisCepat]);
 
   useEffect(() => {
     if (!prompt || !text) return;
@@ -421,6 +471,19 @@ const ResultsPage = () => {
               resultsVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
             }`}
           >
+            {/* Warning Banner */}
+            {isOfflineMode && (
+              <div className="bg-amber-50 border border-amber-300 rounded-xl p-4 flex items-start gap-3 text-amber-800 animate-pulse">
+                <span className="text-xl">⚠️</span>
+                <div>
+                  <h4 className="font-bold text-sm">Mode Evaluasi Lokal Aktif</h4>
+                  <p className="text-xs leading-relaxed mt-0.5">
+                    Koneksi ke AI (Cerebras) sedang bermasalah atau terkena pembatasan limit. Hasil ulasan dan penilaian di bawah ini dikerjakan secara instan oleh mesin pemeriksa tata bahasa lokal aplikasi.
+                  </p>
+                </div>
+              </div>
+            )}
+
             {/* Evaluation Metadata Card */}
             <div className="bg-gray-50 border border-gray-200 rounded-xl p-5 md:p-6 space-y-4">
               <div>
@@ -458,11 +521,21 @@ const ResultsPage = () => {
             {/* AI Feedback Display Card */}
             <div className="space-y-4">
               <h2 className="text-xl font-bold text-slate-800">
-                Hasil Evaluasi AI (Cerebras gpt-oss-120b — Mode {mode === 'kreatif' ? 'Kreatif' : 'Akademis'})
+                {isOfflineMode
+                  ? `Hasil Evaluasi Lokal (Mode ${mode === 'kreatif' ? 'Kreatif' : 'Akademis'})`
+                  : `Hasil Evaluasi AI (Cerebras gpt-oss-120b — Mode ${mode === 'kreatif' ? 'Kreatif' : 'Akademis'})`
+                }
               </h2>
 
-              <div className="text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded-lg p-3.5 leading-relaxed">
-                <strong>Catatan Penting:</strong> Hasil penilaian di bawah ini dihasilkan secara otomatis oleh AI. Penilaian ini bersifat subjektif dan tidak mungkin 100% benar. Gunakan kritik serta saran perbaikan ini sebagai pembanding/referensi belajar mandiri Anda.
+              <div className="text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded-lg p-3.5 leading-relaxed space-y-1.5">
+                <p>
+                  <strong>Catatan Penting:</strong> Hasil penilaian di bawah ini dihasilkan secara otomatis oleh {isOfflineMode ? 'Mesin Lokal' : 'AI'}. Penilaian ini bersifat subjektif dan tidak mungkin 100% benar. Gunakan kritik serta saran perbaikan ini sebagai pembanding/referensi belajar mandiri Anda.
+                </p>
+                {!isOfflineMode && (
+                  <p>
+                    <strong>Batas Konteks (Context Limit):</strong> Respons dan penilaian yang dikeluarkan oleh model AI mungkin terpotong di bagian akhir apabila melewati batas maksimal token (*context limit*) dari penyedia layanan API.
+                  </p>
+                )}
               </div>
               
               <div className="bg-white border border-gray-200 rounded-xl p-6 md:p-8 shadow-sm">
