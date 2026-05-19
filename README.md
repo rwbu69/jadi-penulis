@@ -43,9 +43,9 @@ Jadi Penulis adalah sebuah aplikasi web berbasis React, Vite, dan Tailwind CSS y
 Aplikasi ini menggunakan teknik System Prompting terstruktur dan Few-Shot Prompting untuk memandu model gpt-oss-120b menghasilkan respons yang konsisten, berformat baku, dan akurat.
 
 ### 1. Generator Topik (Topic Generator Prompt)
-Prompt sistem dirancang khusus untuk membatasi model agar tidak memberikan penjelasan tambahan selain teks topik.
-- Akademis: Memerintahkan model untuk merumuskan topik akademis/ilmiah populer yang memicu pemikiran kritis. Format harus berupa satu kalimat pertanyaan (interogatif) atau perintah (imperatif) dengan panjang 2-3 kalimat.
-- Kreatif: Memerintahkan model untuk merumuskan topik deskriptif atau skenario awal narasi yang memicu daya imajinasi sastra. Format harus berupa satu kalimat arahan bersastra dengan panjang 2-3 kalimat.
+Prompt sistem dirancang khusus untuk membatasi model agar tidak memberikan penjelasan tambahan selain teks topik, serta dilengkapi instruksi penjelajahan topik agar tidak monoton.
+- Akademis: Memerintahkan model untuk merumuskan topik akademis/ilmiah populer yang memicu pemikiran kritis. Format harus berupa satu kalimat pertanyaan (interogatif) atau perintah (imperatif) dengan panjang 2-3 kalimat. Model diperintahkan mengeksplorasi domain bahasan yang luas (seperti teknologi masa depan, kecerdasan buatan, kesehatan mental, etika sains, literasi digital, ekonomi, budaya lokal, dll.) dan dilarang menggunakan topik-topik klise yang berulang.
+- Kreatif: Memerintahkan model untuk merumuskan topik deskriptif atau skenario awal narasi yang memicu daya imajinasi sastra. Format harus berupa satu kalimat arahan bersastra dengan panjang 2-3 kalimat. Model diperintahkan mengeksplorasi ragam genre dan latar suasana (seperti realisme magis, solarpunk/distopia, latar pedesaan/perkotaan khas Indonesia, emosi abstrak, fantasi kosmik, dll.) untuk menghadirkan stimulasi imajinasi yang unik.
 
 ### 2. Evaluator Esai (Essay Evaluator Prompt)
 Prompt sistem mencakup rubrik penilaian terstandar berskala 1-4 untuk masing-masing kriteria.

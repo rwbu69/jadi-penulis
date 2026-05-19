@@ -382,6 +382,7 @@ Requirements:
 - Keep the prompt to 2–3 sentences maximum.
 - Do NOT use Markdown, bullet points, quotes, or extra explanations.
 - Do NOT generate a response or answer to the prompt — only the prompt itself.
+- **Maximum Variety Requirement**: You MUST select from a wide, diverse range of topics: environmental issues, future technology (AI, space exploration, automation), local Indonesian cultures/traditions, mental health, ethical dilemmas, economy/finance, historical events, digital literacy, arts and media, etc. Do NOT default to classic prompts like "gawai/gadget di kelas" or "kebersihan sekolah". Ensure each generated prompt is highly unique and different from common, cliché school prompts.
 
 Good prompt examples to guide your style (do NOT copy these exactly):
 - "Apakah penggunaan gawai di dalam kelas sebaiknya dilarang sepenuhnya? Tulislah sebuah paragraf argumentatif yang menyampaikan pendapatmu disertai alasan dan contoh yang logis."
@@ -396,6 +397,7 @@ Requirements:
 - Keep the prompt to 2–3 sentences maximum.
 - Do NOT use Markdown, bullet points, quotes, or extra explanations.
 - Do NOT generate a response or answer to the prompt — only the prompt itself.
+- **Maximum Variety Requirement**: You MUST explore a diverse range of genres and settings: magical realism, dystopian/solarpunk futures, micro-adventures in daily Indonesian village/city life, historical settings, abstract emotions, cosmic fantasy, quiet family moments, etc. Avoid repeating clichés like "keindahan pantai" or "hujan/senja" unless framed in a highly unique, unexpected way. Let your imagination run wild to provide deep, artistic, and unique writing prompts.
 
 Good prompt examples to guide your style (do NOT copy these exactly):
 - "Bayangkan kamu adalah satu-satunya orang yang tersisa di kotamu pada suatu pagi. Tulislah sebuah paragraf deskriptif yang menggambarkan apa yang kamu lihat, dengar, dan rasakan saat berjalan di jalan yang sunyi itu."
