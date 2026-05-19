@@ -1,0 +1,76 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-white text-gray-600 font-sans antialiased;
+    background-color: #ffffff !important;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply text-slate-800 font-sans font-bold;
+  }
+}
+
+/* Page fade-in transition */
+.fade-in {
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Plain CSS spinner */
+.spinner {
+  border: 3px solid rgba(79, 70, 229, 0.1);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border-left-color: #4f46e5; /* indigo-600 */
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Staggered card fade-in and slide-up animation */
+@keyframes slideUpFade {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-slide-up-fade {
+  opacity: 0;
+  animation: slideUpFade 0.5s ease-out forwards;
+}
+
+/* Progress bar growth slide-right animation */
+@keyframes slideRight {
+  from {
+    width: 0%;
+  }
+}
+
+.animate-slide-right {
+  animation: slideRight 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
