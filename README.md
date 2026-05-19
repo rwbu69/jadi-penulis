@@ -1,6 +1,6 @@
-# Jadi Penulis - Platform Latihan Menulis Akademik dan Kreatif
+# Belajar Menulis - Platform Latihan Menulis Akademik dan Kreatif
 
-Jadi Penulis adalah sebuah aplikasi web berbasis React, Vite, dan Tailwind CSS yang dirancang sebagai platform latihan menulis mandiri bagi pelajar Indonesia. Aplikasi ini memanfaatkan integrasi kecerdasan buatan (LLM) gpt-oss-120b melalui API Cerebras AI untuk memberikan umpan balik dan evaluasi instan terhadap kualitas tulisan pengguna.
+Belajar Menulis adalah sebuah aplikasi web berbasis React, Vite, dan Tailwind CSS yang dirancang sebagai platform latihan menulis mandiri bagi pelajar Indonesia. Aplikasi ini memanfaatkan integrasi kecerdasan buatan (LLM) gpt-oss-120b melalui API Cerebras AI untuk memberikan umpan balik dan evaluasi instan terhadap kualitas tulisan pengguna.
 
 ## Fitur Utama
 

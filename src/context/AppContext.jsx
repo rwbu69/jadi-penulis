@@ -4,15 +4,23 @@ import {
   buildEvaluationPrompt 
 } from '../config/aiPrompts';
 
+export class ApiError extends Error {
+  constructor(message, status) {
+    super(message);
+    this.status = status;
+    this.name = 'ApiError';
+  }
+}
+
 export const AppContext = createContext();
 
 export const AppProvider = ({ children }) => {
   const [history, setHistory] = useState(() => {
-    const saved = localStorage.getItem('jadi_penulis_history');
+    const saved = localStorage.getItem('belajar_menulis_history') || localStorage.getItem('jadi_penulis_history');
     try {
       return saved ? JSON.parse(saved) : [];
     } catch (e) {
-      console.error('Failed to parse jadi_penulis_history', e);
+      console.error('Failed to parse belajar_menulis_history', e);
       return [];
     }
   });
@@ -23,7 +31,7 @@ export const AppProvider = ({ children }) => {
 
   // Sync History to localStorage
   useEffect(() => {
-    localStorage.setItem('jadi_penulis_history', JSON.stringify(history));
+    localStorage.setItem('belajar_menulis_history', JSON.stringify(history));
   }, [history]);
 
   // Sync customApiKey to localStorage
@@ -41,18 +49,18 @@ export const AppProvider = ({ children }) => {
     console.error('Cerebras API error response status:', response.status, 'body:', errText);
     
     if (response.status === 429) {
-      throw new Error('Batas limitasi request (Rate Limit 429) tercapai. Harap tunggu beberapa saat sebelum mencoba kembali.');
+      throw new ApiError('Batas limitasi request (Rate Limit 429) tercapai. Harap tunggu beberapa saat sebelum mencoba kembali.', 429);
     }
     if (response.status === 401) {
-      throw new Error('API Key tidak valid atau tidak memiliki izin akses (Unauthorized 401). Periksa kembali API Key Anda.');
+      throw new ApiError('API Key tidak valid atau tidak memiliki izin akses (Unauthorized 401). Periksa kembali API Key Anda.', 401);
     }
     if (response.status === 403) {
-      throw new Error('Akses ditolak (Forbidden 403). Silakan periksa kembali konfigurasi API Key Anda.');
+      throw new ApiError('Akses ditolak (Forbidden 403). Silakan periksa kembali konfigurasi API Key Anda.', 403);
     }
     if (response.status >= 500) {
-      throw new Error(`Terjadi kegagalan server pada Cerebras AI (Server Error ${response.status}). Silakan coba sesaat lagi.`);
+      throw new ApiError(`Terjadi kegagalan server pada Cerebras AI (Server Error ${response.status}). Silakan coba sesaat lagi.`, response.status);
     }
-    throw new Error(`Gagal terhubung ke Cerebras AI (Status ${response.status}). Silakan periksa koneksi internet atau kunci API Anda.`);
+    throw new ApiError(`Gagal terhubung ke Cerebras AI (Status ${response.status}). Silakan periksa koneksi internet atau kunci API Anda.`, response.status);
   };
 
   // Generate a writing prompt using Cerebras API

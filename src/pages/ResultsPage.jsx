@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, useRef } from 'react';
+import React, { useState, useEffect, useContext, useRef, useCallback } from 'react';
 import { useLocation, useNavigate, Link } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 import { AppContext } from '../context/AppContext';
@@ -12,6 +12,7 @@ const ResultsPage = () => {
   const [evaluation, setEvaluation] = useState('');
   const [loading, setLoading] = useState(true);
   const [resultsVisible, setResultsVisible] = useState(false);
+  const [rateLimitCountdown, setRateLimitCountdown] = useState(0);
 
   // Guard against React Strict Mode double-firing during dev
   const evaluationFetched = useRef(false);
@@ -24,29 +25,48 @@ const ResultsPage = () => {
     }
   }, [prompt, text, navigate]);
 
+  const fetchEvaluation = useCallback(async () => {
+    setLoading(true);
+    setRateLimitCountdown(0);
+    try {
+      const feedback = await evaluateWriting(mode || 'akademis', prompt, text);
+      setEvaluation(feedback);
+    } catch (err) {
+      console.error(err);
+      if (err.status === 429) {
+        evaluationFetched.current = false; // allow retrying
+        setRateLimitCountdown(60);
+        return;
+      }
+      toast.error(err.message || 'Gagal memuat evaluasi AI. Silakan coba kirim ulang.');
+      evaluationFetched.current = false;
+      navigate(`/write?mode=${mode || 'akademis'}`);
+    } finally {
+      setLoading(false);
+    }
+  }, [mode, prompt, text, evaluateWriting, navigate]);
+
   useEffect(() => {
     if (!prompt || !text) return;
     if (evaluationFetched.current) return;
     evaluationFetched.current = true;
-
-    const fetchEvaluation = async () => {
-      setLoading(true);
-      try {
-        const feedback = await evaluateWriting(mode || 'akademis', prompt, text);
-        setEvaluation(feedback);
-      } catch (err) {
-        console.error(err);
-        toast.error(err.message || 'Gagal memuat evaluasi AI. Silakan coba kirim ulang.');
-        // Reset fetch guard on failure so they can try again if they navigate back
-        evaluationFetched.current = false;
-        navigate(`/write?mode=${mode || 'akademis'}`);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchEvaluation();
-  }, [prompt, text, mode]);
+  }, [prompt, text, fetchEvaluation]);
+
+  useEffect(() => {
+    if (rateLimitCountdown <= 0) return;
+    const interval = setInterval(() => {
+      setRateLimitCountdown(prev => {
+        if (prev <= 1) {
+          clearInterval(interval);
+          fetchEvaluation();
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [rateLimitCountdown, fetchEvaluation]);
 
   // Results visible transition trigger
   useEffect(() => {
@@ -219,7 +239,7 @@ const ResultsPage = () => {
       <header className="border-b border-gray-200 py-4 px-6 md:px-12 flex justify-between items-center bg-white">
         <div className="flex items-center gap-4">
           <Link to="/" className="font-serif text-2xl text-slate-800 tracking-tight hover:text-indigo-600 transition-all duration-200">
-            Jadi Penulis
+            Belajar Menulis
           </Link>
           <span className={`text-xs px-2.5 py-1 rounded-full font-semibold border ${
             mode === 'kreatif' 
@@ -241,7 +261,17 @@ const ResultsPage = () => {
 
       {/* Main Content Area */}
       <main className="flex-1 max-w-4xl w-full mx-auto p-6 md:p-12 flex flex-col justify-center">
-        {loading ? (
+        {rateLimitCountdown > 0 ? (
+          <div className="flex flex-col items-center justify-center py-20 gap-4 text-center">
+            <div className="w-10 h-10 border-4 border-amber-100 border-t-amber-600 rounded-full animate-spin"></div>
+            <p className="text-amber-800 font-semibold text-base">
+              Rate limit tercapai. Mencoba ulang dalam {rateLimitCountdown} detik...
+            </p>
+            <p className="text-gray-500 text-xs max-w-md">
+              Cerebras API membatasi frekuensi request. Sistem akan otomatis melakukan retry setelah countdown selesai.
+            </p>
+          </div>
+        ) : loading ? (
           <div className="flex flex-col items-center justify-center py-20 gap-4">
             <div className="w-10 h-10 border-4 border-gray-100 border-t-indigo-600 rounded-full animate-spin"></div>
             <p className="text-slate-800 font-medium text-base">

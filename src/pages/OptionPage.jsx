@@ -52,6 +52,17 @@ const OptionPage = () => {
                 Dioptimalkan untuk melatih imajinasi, penulisan naratif, dan deskripsi suasana. AI akan memandu Anda menulis paragraf menggunakan panca indra (penglihatan, pendengaran, rasa), alur cerita yang mengalir, keunikan konsep ide, serta penggunaan majas/figur bahasa yang ekspresif dengan toleransi estetika sastra.
               </p>
             </div>
+
+            {/* Menulis Cepat Section */}
+            <div className="space-y-2">
+              <h2 className="text-lg font-bold text-slate-800 flex items-center gap-2">
+                <span className="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
+                Mode Menulis Cepat (Typing Test)
+              </h2>
+              <p className="text-gray-600 text-sm leading-relaxed">
+                Uji dan tingkatkan kecepatan mengetik Anda. Latih kemampuan mengetik sepuluh jari secara real-time dengan melacak parameter Words Per Minute (WPM), persentase akurasi karakter demi karakter, dan stabilitas konsistensi mengetik Anda.
+              </p>
+            </div>
           </div>
         </div>
       </div>
@@ -76,6 +87,23 @@ const OptionPage = () => {
           >
             Penulisan Kreatif
           </button>
+
+          {/* Menulis Cepat Card */}
+          <div className="border border-amber-200 bg-amber-50/20 rounded-xl p-4.5 flex flex-col gap-2 hover:border-amber-400 transition-colors duration-200 mt-2 text-left">
+            <h3 className="font-bold text-amber-800 text-base flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
+              Menulis Cepat
+            </h3>
+            <p className="text-xs text-gray-500 leading-relaxed">
+              Latihan mengetik cepat secara real-time untuk meningkatkan kecepatan (WPM), akurasi, dan konsistensi.
+            </p>
+            <button
+              onClick={() => navigate('/menulis-cepat')}
+              className="w-full bg-amber-600 text-white py-2.5 px-4 rounded-lg text-sm font-semibold shadow-sm hover:bg-amber-700 active:scale-95 transition-all duration-200 ease-in-out text-center mt-1"
+            >
+              Mulai Menulis Cepat
+            </button>
+          </div>
 
           <Link
             to="/nilai"

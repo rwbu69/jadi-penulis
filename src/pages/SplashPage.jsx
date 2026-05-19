@@ -35,7 +35,7 @@ const SplashPage = () => {
       >
         <div className="max-w-xl">
           <h1 className="text-5xl font-bold font-serif text-slate-800 tracking-tight">
-            Jadi Penulis
+            Belajar Menulis
           </h1>
           <p className="text-gray-500 text-lg mt-3 font-medium">
             Platform latihan menulis akademik untuk pelajar Indonesia.

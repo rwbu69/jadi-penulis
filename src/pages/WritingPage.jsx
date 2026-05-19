@@ -13,6 +13,7 @@ const WritingPage = () => {
   const [promptVisible, setPromptVisible] = useState(false);
   const [userText, setUserText] = useState('');
   const [visible, setVisible] = useState(false);
+  const [rateLimitCountdown, setRateLimitCountdown] = useState(0);
   const navigate = useNavigate();
 
   // Guard against React Strict Mode double-firing during dev
@@ -29,11 +30,16 @@ const WritingPage = () => {
   const fetchPrompt = async () => {
     setLoadingPrompt(true);
     setPromptVisible(false);
+    setRateLimitCountdown(0);
     try {
       const generated = await generateWritingPrompt(mode);
       setPrompt(generated);
     } catch (err) {
       console.error(err);
+      if (err.status === 429) {
+        setRateLimitCountdown(60);
+        return;
+      }
       toast.error(err.message || 'Gagal mengambil topik penulisan. Coba muat ulang halaman.');
       if (mode === 'kreatif') {
         setPrompt('Tuliskan sebuah paragraf tentang perasaan seseorang saat pertama kali melihat senja di tepi pantai terpencil.');
@@ -46,6 +52,21 @@ const WritingPage = () => {
   };
 
   useEffect(() => {
+    if (rateLimitCountdown <= 0) return;
+    const interval = setInterval(() => {
+      setRateLimitCountdown(prev => {
+        if (prev <= 1) {
+          clearInterval(interval);
+          fetchPrompt();
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [rateLimitCountdown]);
+
+  useEffect(() => {
     // Only fetch if mode changed and it hasn't been fetched yet
     if (promptFetched.current === mode) return;
     promptFetched.current = mode;
@@ -54,13 +75,13 @@ const WritingPage = () => {
 
   // Prompt card visibility fade transition trigger
   useEffect(() => {
-    if (!loadingPrompt) {
+    if (!loadingPrompt && rateLimitCountdown === 0) {
       const timer = setTimeout(() => {
         setPromptVisible(true);
       }, 50);
       return () => clearTimeout(timer);
     }
-  }, [loadingPrompt]);
+  }, [loadingPrompt, rateLimitCountdown]);
 
   // Helper to calculate exact word count
   const getWordCount = (val) => {
@@ -109,7 +130,7 @@ const WritingPage = () => {
       <header className="border-b border-gray-200 py-4 px-6 md:px-12 flex justify-between items-center bg-white">
         <div className="flex items-center gap-4">
           <Link to="/" className="font-serif text-2xl text-slate-800 tracking-tight hover:text-indigo-600 transition-all duration-200">
-            Jadi Penulis
+            Belajar Menulis
           </Link>
           <span className={`text-xs px-2.5 py-1 rounded-full font-semibold border ${
             mode === 'kreatif' 
@@ -260,7 +281,14 @@ const WritingPage = () => {
                 )}
               </div>
 
-              {loadingPrompt ? (
+              {rateLimitCountdown > 0 ? (
+                <div className="bg-amber-50 border border-amber-200 rounded-xl p-8 flex flex-col items-center justify-center gap-3">
+                  <div className="w-9 h-9 border-3 border-amber-100 border-t-amber-600 rounded-full animate-spin"></div>
+                  <span className="text-xs text-amber-700 font-semibold">
+                    Rate limit tercapai. Mencoba ulang dalam {rateLimitCountdown} detik...
+                  </span>
+                </div>
+              ) : loadingPrompt ? (
                 <div className="bg-gray-50 border border-gray-200 rounded-xl p-8 flex flex-col items-center justify-center gap-3">
                   <div className="w-9 h-9 border-3 border-indigo-100 border-t-indigo-600 rounded-full animate-spin"></div>
                   <span className="text-xs text-gray-500 animate-pulse">Membuat topik menulis baru...</span>

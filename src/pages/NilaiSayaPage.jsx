@@ -342,7 +342,7 @@ const NilaiSayaPage = () => {
       <header className="border-b border-gray-200 py-4 px-6 md:px-12 flex justify-between items-center bg-white">
         <div className="flex items-center gap-2">
           <Link to="/" className="font-serif text-2xl text-slate-800 tracking-tight hover:text-indigo-600 transition-all duration-200">
-            Jadi Penulis
+            Belajar Menulis
           </Link>
         </div>
         <div className="flex items-center gap-4">

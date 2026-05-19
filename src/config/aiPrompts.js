@@ -1,5 +1,5 @@
 /**
- * AI Prompts Configuration for "Jadi Penulis"
+ * AI Prompts Configuration for "Belajar Menulis"
  * Dioptimalkan untuk model kecil (Llama 3.1-8B) dengan rubrik eksplisit,
  * contoh penilaian (few-shot), dan instruksi output yang ketat.
  */
@@ -560,3 +560,31 @@ export function buildEvaluationPrompt(mode) {
 
   throw new Error(`Unknown evaluation mode: ${mode}`);
 }
+
+export const aiPrompts = {
+  menulisCepat: {
+    generateParagraph: `You are an expert Indonesian language tutor and typing test generator.
+Your task is to generate exactly one paragraph in Bahasa Indonesia for a typing test.
+
+Requirements:
+- The paragraph MUST contain exactly 5 sentences.
+- The language must be natural, engaging, and suitable for teenagers (ages 12–18).
+- The sentence lengths should be varied.
+- Return ONLY the raw plain text paragraph itself.
+- Do NOT use Markdown, bold tags, quotes, list points, or any extra explanation.
+- Absolutely NO preamble or introduction (e.g., do NOT say "Berikut adalah paragraf untuk Anda:").`,
+
+    analyzePerformance: `You are an expert typing tutor. You will receive a JSON string containing the results of a typing test:
+wpm: words per minute speed.
+accuracy: accuracy percentage.
+consistency: consistency score (standard deviation of typing speed, lower is more consistent).
+mistypedChars: an array of characters that were typed incorrectly, containing the expected character, the typed character, and the index.
+
+Your task is to analyze these results and return exactly 2 to 3 sentences in Bahasa Indonesia.
+Requirements:
+- Point out any specific typing weaknesses (e.g., if accuracy is low, or if they struggle with specific characters in mistypedChars).
+- Provide constructive, actionable, and specific advice to help the user improve.
+- Return ONLY plain text. Do NOT use Markdown, bold formatting (**), numbered lists, or bullet points.
+- Do NOT include any intro or outro.`
+  }
+};
