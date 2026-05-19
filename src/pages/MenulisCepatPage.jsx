@@ -111,7 +111,7 @@ const MenulisCepatPage = () => {
               content: 'Berikan satu paragraf bahasa Indonesia untuk tes mengetik cepat. Panjang teks WAJIB minimal 100 kata.',
             }
           ],
-          max_tokens: 512,
+          max_tokens: 1024,
         }),
       });
 
@@ -123,7 +123,7 @@ const MenulisCepatPage = () => {
       }
 
       const data = await response.json();
-      const content = data.choices?.[0]?.message?.content;
+      const content = data.choices?.[0]?.message?.content || data.choices?.[0]?.text;
       if (!content) throw new Error('Response kosong diterima dari AI');
       setTargetText(content.trim());
     } catch (err) {

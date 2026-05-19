@@ -188,7 +188,7 @@ export const AppProvider = ({ children }) => {
 - Karakter salah ketik: ${formattedMistyped}`,
           }
         ],
-        max_tokens: 512,
+        max_tokens: 1024,
       }),
     });
 
@@ -197,7 +197,7 @@ export const AppProvider = ({ children }) => {
     }
 
     const data = await response.json();
-    const evaluationText = data.choices?.[0]?.message?.content;
+    const evaluationText = data.choices?.[0]?.message?.content || data.choices?.[0]?.text;
     if (!evaluationText) {
       throw new Error('Empty evaluation returned from Cerebras');
     }
