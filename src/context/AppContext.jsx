@@ -161,6 +161,11 @@ export const AppProvider = ({ children }) => {
       throw new Error('Cerebras API Key is missing. Silakan masukkan API Key Anda di halaman utama.');
     }
 
+    const safeMistyped = Array.isArray(mistypedVal) ? mistypedVal : [];
+    const formattedMistyped = safeMistyped.length > 0
+      ? safeMistyped.slice(0, 15).map(c => `"${c.expected}" tertukar "${c.typed}"`).join(', ')
+      : 'Tidak ada';
+
     const response = await fetch('/cerebras/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -176,12 +181,11 @@ export const AppProvider = ({ children }) => {
           },
           {
             role: 'user',
-            content: JSON.stringify({
-              wpm: wpmVal,
-              accuracy: accVal,
-              consistency: consVal,
-              mistypedChars: mistypedVal.slice(0, 15) // Keep context window small
-            }),
+            content: `Berikut adalah hasil tes mengetik saya untuk dianalisis:
+- Kecepatan (WPM): ${wpmVal}
+- Akurasi: ${accVal}%
+- Konsistensi (Standar Deviasi): ${consVal}
+- Karakter salah ketik: ${formattedMistyped}`,
           }
         ],
         max_tokens: 512,
