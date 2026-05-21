@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 import { AppContext } from '../context/AppContext';
+import Logo from '../components/Logo';
 
 const SplashPage = () => {
   const navigate = useNavigate();
@@ -34,11 +35,12 @@ const SplashPage = () => {
         }`}
       >
         <div className="max-w-xl">
-          <h1 className="text-5xl font-bold font-serif text-slate-800 tracking-tight">
-            Belajar Menulis
-          </h1>
+          {/* Logo Placeholder - AKAL Brand */}
+          <div className="mb-6">
+            <Logo size="xl" />
+          </div>
           <p className="text-gray-500 text-lg mt-3 font-medium">
-            Platform latihan menulis akademik untuk pelajar Indonesia.
+            Platform latihan menulis akademik & kreatif untuk pelajar Indonesia.
           </p>
 
           {/* Disclaimer Card */}

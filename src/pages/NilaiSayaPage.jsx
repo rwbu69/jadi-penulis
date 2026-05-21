@@ -3,6 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
 import { AppContext } from '../context/AppContext';
+import Logo from '../components/Logo';
 
 const NilaiSayaPage = () => {
   const { history, clearHistory } = useContext(AppContext);
@@ -435,8 +436,8 @@ const NilaiSayaPage = () => {
       {/* Navigation Header */}
       <header className="border-b border-gray-200 py-4 px-6 md:px-12 flex justify-between items-center bg-white">
         <div className="flex items-center gap-2">
-          <Link to="/" className="font-serif text-2xl text-slate-800 tracking-tight hover:text-indigo-600 transition-all duration-200">
-            Belajar Menulis
+          <Link to="/" className="hover:opacity-90 transition-all duration-200">
+            <Logo size="sm" />
           </Link>
         </div>
         <div className="flex items-center gap-4">

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import Logo from '../components/Logo';
 
 const IframeEmbed = ({ src, title }) => {
   // Try to clean up youtube links for proper embedding
@@ -49,8 +50,8 @@ const AboutPage = () => {
       {/* Navigation Header */}
       <header className="border-b border-gray-200 py-4 px-6 md:px-12 flex justify-between items-center bg-white sticky top-0 z-50 shadow-sm">
         <div className="flex items-center gap-4">
-          <Link to="/" className="font-serif text-2xl text-slate-800 tracking-tight hover:text-indigo-600 transition-all duration-200">
-            Belajar Menulis
+          <Link to="/" className="hover:opacity-90 transition-all duration-200">
+            <Logo size="sm" />
           </Link>
           <span className="text-xs px-2.5 py-1 rounded-full font-semibold border bg-slate-100 text-slate-600 border-slate-200">
             Tentang Kami & Referensi
@@ -77,10 +78,51 @@ const AboutPage = () => {
           
           <div className="prose prose-indigo max-w-none text-gray-600 text-base md:text-lg leading-relaxed space-y-6">
             <p>
-              <strong className="text-slate-800">Belajar Menulis</strong> lahir dari satu keprihatinan yang sederhana: terlalu banyak siswa Indonesia yang sebenarnya punya ide, tapi tidak tahu bagaimana menuangkannya ke dalam tulisan yang baik — dan tidak pernah mendapat umpan balik yang cukup untuk tumbuh.
+              <strong className="text-slate-800">AKAL (Aksara | Karsa | Logika)</strong> lahir dari satu keprihatinan yang sederhana: terlalu banyak siswa Indonesia yang sebenarnya punya ide, tapi tidak tahu bagaimana menuangkannya ke dalam tulisan yang baik — dan tidak pernah mendapat umpan balik yang cukup untuk bertumbuh.
             </p>
             <p>
-              Kami adalah platform latihan menulis berbasis AI yang dirancang khusus untuk pelajar SMP dan SMA Indonesia. Di sini, kamu bisa berlatih melalui tiga jalur: <strong>Menulis Akademis</strong> untuk mengasah argumen dan struktur berpikir kritis, <strong>Menulis Kreatif</strong> untuk mengembangkan ekspresi dan imajinasi, serta <strong>Menulis Cepat</strong> untuk melatih keberanian menulis tanpa ragu. Setiap tulisan yang kamu kirimkan akan langsung dievaluasi secara otomatis — bukan sekadar dicek ejaannya, tapi dinilai secara menyeluruh sesuai standar EYD Edisi V dan kriteria yang relevan dengan jenis tulisannya.
+              Nama <strong className="text-indigo-600">AKAL</strong> merepresentasikan tiga pilar utama kemampuan berpikir dan berbahasa yang kami kembangkan:
+            </p>
+            
+            {/* Tiga Pilar Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 my-8">
+              <div className="bg-slate-50 border border-slate-200 rounded-xl p-5 hover:shadow-md transition-shadow flex flex-col items-start">
+                <div className="text-indigo-600 mb-3 bg-indigo-50 p-2.5 rounded-lg border border-indigo-100/50">
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                  </svg>
+                </div>
+                <h4 className="text-lg font-bold text-slate-800 mb-1">Aksara</h4>
+                <p className="text-sm text-gray-600">
+                  Penguasaan media tulisan, tata bahasa, dan ejaan yang presisi sesuai standar EYD Edisi V untuk melahirkan komunikasi yang tertib dan santun.
+                </p>
+              </div>
+              <div className="bg-slate-50 border border-slate-200 rounded-xl p-5 hover:shadow-md transition-shadow flex flex-col items-start">
+                <div className="text-indigo-600 mb-3 bg-indigo-50 p-2.5 rounded-lg border border-indigo-100/50">
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                  </svg>
+                </div>
+                <h4 className="text-lg font-bold text-slate-800 mb-1">Karsa</h4>
+                <p className="text-sm text-gray-600">
+                  Daya cipta, imajinasi, kehendak bebas, dan keberanian berekspresi secara orisinal melalui genre-genre kreatif dan eksplorasi tulisan tanpa ragu.
+                </p>
+              </div>
+              <div className="bg-slate-50 border border-slate-200 rounded-xl p-5 hover:shadow-md transition-shadow flex flex-col items-start">
+                <div className="text-indigo-600 mb-3 bg-indigo-50 p-2.5 rounded-lg border border-indigo-100/50">
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M18 18.72a3 3 0 000-5.44M6.5 18.72a3 3 0 010-5.44M12 9.6a3 3 0 100-6 3 3 0 000 6zM12 9.6l3.5 6.3M12 9.6l-3.5 6.3" />
+                  </svg>
+                </div>
+                <h4 className="text-lg font-bold text-slate-800 mb-1">Logika</h4>
+                <p className="text-sm text-gray-600">
+                  Ketajaman penalaran, koherensi antar-argumen, serta penataan struktur berpikir objektif dan analitis dalam menguraikan suatu masalah.
+                </p>
+              </div>
+            </div>
+
+            <p>
+              Kami adalah platform latihan menulis berbasis AI yang dirancang khusus untuk pelajar SMP dan SMA Indonesia. Di sini, kamu bisa berlatih melalui tiga jalur: <strong>Menulis Akademis</strong> untuk mengasah argumen dan struktur berpikir kritis (Logika), <strong>Menulis Kreatif</strong> untuk mengembangkan ekspresi dan imajinasi (Karsa), serta <strong>Menulis Cepat</strong> untuk melatih keberanian menulis secara spontan dan tangkas. Setiap tulisan yang kamu kirimkan akan langsung dievaluasi secara otomatis — bukan sekadar dicek ejaannya (Aksara), tapi dinilai secara menyeluruh oleh kecerdasan buatan terstandar.
             </p>
 
             <h3 className="text-xl font-bold text-slate-800 mt-10 mb-4">Mengapa Aplikasi Ini Diperlukan</h3>
@@ -97,7 +139,7 @@ const AboutPage = () => {
               Di sinilah teknologi bisa menjadi jembatan. Penelitian menunjukkan bahwa AI writing tools mampu memberikan umpan balik otomatis, memperbaiki kesalahan tata bahasa, serta memberikan saran perbaikan gaya penulisan secara instan, sehingga siswa dapat belajar menulis dengan lebih interaktif dan mandiri. Lebih jauh lagi, penggunaan AI sebagai alat bantu menulis terbukti dapat meningkatkan produktivitas, kualitas ide, dan struktur cerita yang dihasilkan oleh siswa SMA.
             </p>
             <p className="font-medium text-indigo-900 bg-indigo-50 p-6 rounded-xl border border-indigo-100 italic">
-              Belajar Menulis bukan alat yang menulis untuk kamu. Kami adalah teman latihan yang hadir setiap saat — memberi penilaian yang jujur, konstruktif, dan spesifik, agar setiap sesi menulis menjadi satu langkah nyata menuju tulisan yang lebih baik.
+              <strong>AKAL</strong> bukan alat yang menulis untuk kamu. Kami adalah teman latihan yang hadir setiap saat — memberi penilaian yang jujur, konstruktif, dan spesifik, agar setiap sesi menulis menjadi satu langkah nyata menuju pemikiran dan tulisan yang lebih ber-AKAL.
             </p>
           </div>
         </section>

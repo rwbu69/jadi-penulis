@@ -3,6 +3,7 @@ import { useLocation, useNavigate, Link } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 import { AppContext } from '../context/AppContext';
 import { runLocalEvaluation, runLocalMenulisCepatEvaluation } from '../utils/localEvaluationEngine';
+import Logo from '../components/Logo';
 
 const HighlightedText = ({ text, corrections }) => {
   if (!corrections || corrections.length === 0) {
@@ -423,8 +424,8 @@ const ResultsPage = () => {
       {/* Navigation Header */}
       <header className="border-b border-gray-200 py-4 px-6 md:px-12 flex justify-between items-center bg-white">
         <div className="flex items-center gap-4">
-          <Link to="/" className="font-serif text-2xl text-slate-800 tracking-tight hover:text-indigo-600 transition-all duration-200">
-            Belajar Menulis
+          <Link to="/" className="hover:opacity-90 transition-all duration-200">
+            <Logo size="sm" />
           </Link>
           <span className={`text-xs px-2.5 py-1 rounded-full font-semibold border ${
             mode === 'menulisCepat' ? 'bg-amber-50 text-amber-700 border-amber-200' :

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import Logo from '../components/Logo';
 
 const OptionPage = () => {
   const navigate = useNavigate();
@@ -21,6 +22,8 @@ const OptionPage = () => {
         }`}
       >
         <div className="max-w-xl space-y-8">
+          <Logo size="md" />
+
           <div>
             <h1 className="text-4xl font-bold font-serif text-slate-800 tracking-tight">
               Pilih Fokus Latihan Anda
